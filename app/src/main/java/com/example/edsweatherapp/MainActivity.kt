@@ -16,9 +16,16 @@ class MainActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityMainBinding
+    private var currentCity: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        RetrofitClient.init(this)
+
+
+
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -28,7 +35,22 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please enter a city name", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            currentCity = city //saves city before fetch
             fetchWeather(city)
+        }
+
+        binding.btnSubmitFeedback.setOnClickListener {
+            if(currentCity.isEmpty()){
+                Toast.makeText(this, "Please fetch weather for a city first", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val rating = binding.ratingBar.rating.toInt()
+            val comment =  binding.etComment.text.toString().trim()
+            if(comment.isEmpty()){
+                Toast.makeText(this, "Please Leave a Comment", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            submitFeedback(currentCity, rating, comment)
         }
     }
 
@@ -83,5 +105,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
         Toast.makeText(this, "Coming soon — weather for $city", Toast.LENGTH_SHORT).show()
+    }
+
+
+    private fun submitFeedback(city: String, rating: Int, comment: String){
+        lifecycleScope.launch {
+            try{}
+            catch(e: Exception){}
+            finally{}
+        }
     }
 }
